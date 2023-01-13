@@ -1,0 +1,32 @@
+<html>
+  <title>
+    Fortune Teller
+  </title>
+  <body>
+  <h2>Welcome</h2>
+    <ul>
+      {% for user in users%}
+      <li>{{user.name}} - {{
+      user.since }} </li>
+      {% endfor %}
+    </ul>
+
+    <form method="POST" action="/fortune">
+    <input type="text" name="user">
+    <select name="color">
+        <option>blue</option>
+        <option>purple</option>
+        <option>yellow</option>
+        <option>orange</option>
+    </select>
+    <select name="number">
+        <option>1</option>
+        <option>2</option>
+        <option>3</option>
+        <option>4</option>
+    </select>
+    <button>submit</button>
+</form>
+  </body>
+  
+</html>
