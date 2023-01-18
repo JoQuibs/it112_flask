@@ -1,4 +1,4 @@
-from flask import Flask
+from flask import Flask, render_template, request
 
 app = Flask(__name__)
 
@@ -13,9 +13,9 @@ def about():
     return 'I am a student under the program of IT Web Development, I plan to continue my bachelor degree under the program of Software Development at North Seattle College.'
 
 
-@app.route('/fortune')
+@app.route('/fortune', methods=['GET', 'POST'])
 def fortune():
-    return 'Fortune Teller'
+    return render_template("user.html")
 
 
 @app.route('/user/<username>')
