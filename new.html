@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
    <body>
-      <h3>Games - Flask SQLAlchemy example</h3>
+      <h3>Cars List</h3>
       <hr/>
       
       {%- for category, message in get_flashed_messages(with_categories = true) %}
@@ -11,14 +11,12 @@
       {%- endfor %}
       
       <form action = "{{ request.path }}" method = "post">
-         <label for = "name">Game Name</label><br>
-         <input type = "text" name = "name" placeholder = "name" /><br>
-         <label for = "console">Console</label><br>
-         <input type = "text" name = "city" placeholder = "console" /><br>
-         <label for = "player">Player</label><br>
-         <textarea name = "player" placeholder = "player"></textarea><br>
-         <label for = "price">Price</label><br>
-         <input type = "text" name = "price" placeholder = "price" /><br>
+         <label for = "make">Car Make</label><br>
+         <input type = "text" name = "make" placeholder = "make" /><br>
+         <label for = "model">Car Model</label><br>
+         <input type = "text" name = "model" placeholder = "model" /><br>
+         <label for = "year">Car Year</label><br>
+         <textarea name = "year" placeholder = "year"></textarea><br>
          <input type = "submit" value = "Submit" />
       </form>
    </body>
