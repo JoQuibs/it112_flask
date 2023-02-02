@@ -3,8 +3,8 @@
    <head></head>
    <body>
       <h3>
-         <a href = "{{ url_for('show_all') }}">Comments - Flask 
-            SQLAlchemy example</a>
+         <a href = "{{ url_for('show_all') }}">
+            CAR LIST</a>
       </h3>
       
       <hr/>
@@ -12,26 +12,24 @@
          {{ message }}
       {%- endfor %}
 		
-      <h3>Games (<a href = "{{ url_for('new') }}">Add Game
+      <h3>Cars (<a href = "{{ url_for('new') }}">Add Car
          </a>)</h3>
       
       <table>
          <thead>
             <tr>
-               <th>Game Name</th>
-               <th>Console</th>
-               <th>Player</th>
-               <th>Price</th>
+               <th>Make</th>
+               <th>Model</th>
+               <th>Year</th>
             </tr>
          </thead>
 
          <tbody>
-            {% for game in games %}
+            {% for car in Cars %}
                <tr>
-                  <td>{{ game.name }}</td>
-                  <td>{{ game.console }}</td>
-                  <td>{{ game.player }}</td>
-                  <td>{{ game.price }}</td>
+                  <td>{{ Cars.make }}</td>
+                  <td>{{ Cars.model }}</td>
+                  <td>{{ Cars.year }}</td>
                </tr>
             {% endfor %}
          </tbody>
