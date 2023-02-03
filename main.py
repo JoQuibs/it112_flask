@@ -1,4 +1,4 @@
-from flask import Flask, request, render_template
+from flask import Flask, request, render_template, jsonify
 from flask_sqlalchemy import SQLAlchemy
 
 app = Flask(__name__)
@@ -26,7 +26,7 @@ with app.app_context():
 
 @app.route('/list')
 def list():
-  return render_template('list.html', car=Car.query.all())
+  return render_template('list.html', cars=Car.query.all())
 
 
 #HW1
