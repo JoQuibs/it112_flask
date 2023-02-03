@@ -1,7 +1,32 @@
-from flask import Flask, request, flash, url_for, redirect, render_template
+from flask import Flask, request, render_template
 from flask_sqlalchemy import SQLAlchemy
 
 app = Flask(__name__)
+
+#HW3
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///car.db'
+
+db = SQLAlchemy(app)
+
+
+class Car(db.Model):
+  id = db.Column('car_id', db.Integer, primary_key=True)
+  make = db.Column(db.String(100))
+  model = db.Column(db.String(100))
+  year = db.Column(db.String(50))
+
+  def __repr__(self):
+    return '<Car %r>' % self.make
+
+
+# create / use the database
+with app.app_context():
+  db.create_all()
+
+
+@app.route('/list')
+def list():
+  return render_template('list.html', car=Car.query.all())
 
 
 #HW1
@@ -69,50 +94,6 @@ def fortune():
   else:
     fort = None
   return render_template("fortune.html", fortune=fort, user=username)
-
-
-#HW3
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///car.db'
-app.config['SECRET_KEY'] = "random string"
-
-db = SQLAlchemy(app)
-
-
-class Cars(db.Model):
-  id = db.Column('car_id', db.Integer, primary_key=True)
-  make = db.Column(db.String(100))
-  model = db.Column(db.String(100))
-  year = db.Column(db.String(50))
-   
-  def __repr__(self):
-    return '<Cars %r>' % self.make
-
-# create / use the database
-with app.app_context():
-  db.create_all()
-  
-#shows link to add data
-@app.route('/show')
-def show_all():
-  return render_template('show_all.html', car=Cars.query.all())
-
-
-#shows new form
-@app.route('/new', methods=['GET', 'POST'])
-def new():
-  if request.method == 'POST':
-    if not request.form['make'] or not request.form[
-        'model'] or not request.form['year']:
-      flash('Please enter all the fields', 'error')
-    else:
-      car = Cars(request.form['make'],         request.form['model'], request.form['year'])
-
-      db.session.add(car)
-      db.session.commit()
-
-      flash('Record was successfully added')
-      return redirect(url_for('show_all'))
-      return render_template('new.html')
 
 
 app.run(host='0.0.0.0', port=81)
