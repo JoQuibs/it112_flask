@@ -1,7 +1,100 @@
 from flask import Flask, request, render_template, jsonify
 from flask_sqlalchemy import SQLAlchemy
+import requests
+import json
 
 app = Flask(__name__)
+
+#HW4
+#API route to add new DB items
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///shoe.db'
+
+db = SQLAlchemy(app)
+
+
+class Shoe(db.Model):
+  id = db.Column(db.Integer, primary_key=True)
+  brand = db.Column(db.String(100))
+  size = db.Column(db.String(50))
+
+  @property
+  def serialize(self):
+    """Return object data in easily serializable format"""
+    return {'id': self.id, 'brand': self.brand, 'size': self.size}
+
+
+@app.route('/api/shoes')
+def api_shoes():
+  # return db query results as a JSON list
+  return jsonify([shoe.serialize for shoe in Shoe.query.all()])
+
+
+@app.post('/api/make')
+def add_make():
+  # normally we would validate the submission before adding to our list
+  data.update(request.get_json())
+  return '', 200
+
+
+@app.post('/api/shoe')
+def add_shoe():
+db.  # normally we would validate the submission before adding to our list
+  data = request.get_json()
+  try:
+    shoe = Shoe(brand=data['brand'], size=data['size'])
+    db.session.add(shoe)
+    db.session.commit()
+    return jsonify({"status": "success"})
+  except Exception:
+    return app.response_class(response={"status": "failure"},
+                              status=500,
+                              mimetype='application/json')
+
+
+#api route that returns all DB data
+data = {
+  "Name": "chevrolet chevelle malibu",
+  "Miles_per_Gallon": 18,
+  "Cylinders": 8,
+  "Displacement": 307,
+  "Horsepower": 130,
+  "Weight_in_lbs": 3504,
+  "Acceleration": 12,
+  "Year": "1970-01-01",
+  "Origin": "USA"
+}
+
+
+@app.get('/api/cars')
+def courses():
+  return jsonify(data)
+
+
+#api responds with status code 200 for valid submissions
+@app.route('/api/data1')
+def api_data1():
+  url = "http://universities.hipolabs.com/search?country=United+States"
+  try:
+    result = requests.get(url)
+    return app.response_class(response=result.text,
+                              status=200,
+                              mimetype='application/json')
+  except:
+    return jsonify({"error": f"Unable to get {url}"})
+
+
+#api responds with status code 500 for invalid submissions
+@app.route('/api/data2')
+def api_data2():
+  url = "http://universities.hipolabs.com/search?country=United+States"
+  try:
+    result = requests.get(url)
+    return app.response_class(response=result.text,
+                              status=500,
+                              mimetype='application/json')
+  except:
+    return jsonify({"error": f"Unable to get {url}"})
+
 
 #HW3
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///car.db'
