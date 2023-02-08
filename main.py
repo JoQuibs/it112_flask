@@ -7,48 +7,32 @@ app = Flask(__name__)
 
 #HW4
 #API route to add new DB items
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///shoe.db'
-
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///car.db'
 db = SQLAlchemy(app)
 
 
-class Shoe(db.Model):
-  id = db.Column(db.Integer, primary_key=True)
-  brand = db.Column(db.String(100))
-  size = db.Column(db.String(50))
-
-  @property
-  def serialize(self):
-    """Return object data in easily serializable format"""
-    return {'id': self.id, 'brand': self.brand, 'size': self.size}
+class Car(db.Model):
+  id = db.Column('car_id', db.Integer, primary_key=True)
+  make = db.Column(db.String(100))
+  model = db.Column(db.String(100))
+  year = db.Column(db.String(50))
 
 
-@app.route('/api/shoes')
-def api_shoes():
+@property
+def serialize(self):
+  """Return object data in easily serializable format"""
+  return {
+    'id': self.id,
+    'make': self.make,
+    'model': self.model,
+    'year': self.year
+  }
+
+
+@app.route('/api/cars')
+def api_cars():
   # return db query results as a JSON list
-  return jsonify([shoe.serialize for shoe in Shoe.query.all()])
-
-
-@app.post('/api/make')
-def add_make():
-  # normally we would validate the submission before adding to our list
-  data.update(request.get_json())
-  return '', 200
-
-
-@app.post('/api/shoe')
-def add_shoe():
-db.  # normally we would validate the submission before adding to our list
-  data = request.get_json()
-  try:
-    shoe = Shoe(brand=data['brand'], size=data['size'])
-    db.session.add(shoe)
-    db.session.commit()
-    return jsonify({"status": "success"})
-  except Exception:
-    return app.response_class(response={"status": "failure"},
-                              status=500,
-                              mimetype='application/json')
+  return jsonify([cars.serialize for cars in Car.query.all()])
 
 
 #api route that returns all DB data
@@ -65,8 +49,8 @@ data = {
 }
 
 
-@app.get('/api/cars')
-def courses():
+@app.get('/api/car')
+def cars():
   return jsonify(data)
 
 
