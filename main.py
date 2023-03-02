@@ -1,13 +1,13 @@
 from flask import Flask, request, render_template, jsonify
 from flask_sqlalchemy import SQLAlchemy
 import requests
-import json
+
 
 app = Flask(__name__)
 
-#HW4
-#API route to add new DB items
+#HW3
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///car.db'
+
 db = SQLAlchemy(app)
 
 
@@ -18,22 +18,35 @@ class Car(db.Model):
   year = db.Column(db.String(50))
 
 
-@property
-def serialize(self):
-  """Return object data in easily serializable format"""
-  return {
-    'id': self.id,
-    'make': self.make,
-    'model': self.model,
-    'year': self.year
-  }
+  @property #HW4
+  def serialize(self):
+    """Return object data in easily serializable format"""
+    return {'id': self.id,
+            'make': self.make, 
+            'model': self.model, 
+            'year': self.year}
 
 
-@app.route('/api/cars')
+@app.route('/api/cars') #HW4
 def api_cars():
   # return db query results as a JSON list
-  return jsonify([cars.serialize for cars in Car.query.all()])
+  return jsonify([car.serialize for car in Car.query.all()])
 
+  def __repr__(self):
+    return '<Car %r>' % self.make
+
+
+# create / use the database
+with app.app_context():
+  db.create_all()
+
+
+@app.route('/list')
+def list():
+  return render_template('list.html', cars=Car.query.all())
+
+
+#HW4
 
 #api route that returns all DB data
 data = {
@@ -50,7 +63,7 @@ data = {
 
 
 @app.get('/api/car')
-def cars():
+def car():
   return jsonify(data)
 
 
@@ -78,32 +91,6 @@ def api_data2():
                               mimetype='application/json')
   except:
     return jsonify({"error": f"Unable to get {url}"})
-
-
-#HW3
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///car.db'
-
-db = SQLAlchemy(app)
-
-
-class Car(db.Model):
-  id = db.Column('car_id', db.Integer, primary_key=True)
-  make = db.Column(db.String(100))
-  model = db.Column(db.String(100))
-  year = db.Column(db.String(50))
-
-  def __repr__(self):
-    return '<Car %r>' % self.make
-
-
-# create / use the database
-with app.app_context():
-  db.create_all()
-
-
-@app.route('/list')
-def list():
-  return render_template('list.html', cars=Car.query.all())
 
 
 #HW1
