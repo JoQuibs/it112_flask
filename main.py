@@ -44,7 +44,18 @@ with app.app_context():
 @app.route('/list')
 def list():
   return render_template('list.html', cars=Car.query.all())
-
+  
+@app.route('/add/car', methods=["GET", "POST"])
+def add_car():
+    if request.method == "POST":
+        car = Car(
+            make=request.form["make"],
+            model=request.form["model"],
+            year=request.form["year"],
+        )
+        db.session.add(car)
+        db.session.commit()
+    return render_template("add_data.html")
 
 #HW4
 
